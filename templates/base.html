@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    {% block head %}
+    <title>{% block title %}{% endblock %} - Game of Life</title>
+    {% endblock %}
+</head>
+
+<body>
+    <div id="container">
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
+
+        <div id="logo">
+            <img src="{{ url_for('static', filename='game_of_life.png') }}" alt="Game of Life" height="150px" />
+        </div>
+
+        <div id="header">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul class="flashes">
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        </div>
+
+
+        <div id="content">
+            {% block content %}{% endblock %} 
+        </div>
+
+        <div id="footer">
+            {% block footer %}
+            <p>Welcome, {{ username }} - <a href="{{ url_for('logout') }}" >logout</a></p>
+            A Behnanan Site <a href="https://github.com/Behnanan">Github</a> 
+            {% endblock%}
+        </div>
+    </div>
+</body>
+
+</html>
+
