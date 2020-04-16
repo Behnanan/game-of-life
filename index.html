@@ -1,27 +1,15 @@
+
 <!DOCTYPE html>
 <html>
 <body>
 
-<canvas id="myCanvas" width="1000" height="750"
-style="border:1px solid #c3c3c3;">
-Your browser does not support the canvas element.
-</canvas>
+<p id="demo"></p>
 
-<script>
-    
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#FF0000";
-    ctx.fillRect(0,0,150,75);
+<canvas id="canvas" width="800" height="450" style="border:1px solid #c3c3c3;"></canvas> 
 
-    var max = 10;
-    for (i = 0; i < max; i++){
-        ctx.fillRect(0,0,5,5)
-    }
 
-</script>
+<script type=text/javascript src="./js/main.js"></script>
 
 
 </body>
 </html>
-
