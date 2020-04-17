@@ -1,7 +1,9 @@
 
 class Cell {
-    constructor(cellStatus) {
+    constructor(cellStatus, x, y) {
       this.status = cellStatus;
+      this.x = x;
+      this.y = y;
     }
     get cellStatus() {
       return this.status;
@@ -9,8 +11,15 @@ class Cell {
     set cellStatus(newStatus) {
       this.status = newStatus;
     }
+    get getX(){
+      return this.x;
+    }
+    get getY(){
+      return this.y;
+    }
   }
-  
+ 
+// The Grid
 // the render logic should be focusing on the rendering 
 var drawGrid = function(ctx, w, h, step) {
   ctx.beginPath(); 
@@ -37,24 +46,37 @@ var drawGrid = function(ctx, w, h, step) {
   ctx.stroke(); 
 };
 
+/**
+ * Check neighboring cells
+ * Are the grids surrounding this cell alive?
+ */
+var checkNeighbors = function(cell) {
 
-cell = new Cell("ALIVE");
-cell.cellStatus = "DEAD"
-document.getElementById("demo").innerHTML = cell.cellStatus;
-
-
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
-
-if(cell.cellStatus == "ALIVE") {
-  ctx.fillRect(0,0,10,10);
-  ctx.fillStyle = "#FF0000";
 }
 
 
+/**
+ * Main starts here
+ */
+
+// canvas and grid
+var canvas = document.getElementById("canvas");
+var ctx = canvas.getContext("2d");
 drawGrid(ctx, 800, 450, 10);
 
+// create new cell and display
+cell = new Cell("ALIVE",0,0);
+// cell.cellStatus = "DEAD"
+// document.getElementById("demo").innerHTML = cell.cellStatus;
 
+// cell conditional
+if(cell.cellStatus == "ALIVE") {
+  ctx.fillRect(cell.getX,cell.getY,10,10);
+  ctx.fillStyle = "#FF0000";
+}
+
+// ctx.fillRect(400,220,10,10)
+// ctx.fillStyle = "#FF0000";
 
 
 
