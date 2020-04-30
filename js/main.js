@@ -34,27 +34,32 @@ function cellFactory(arrayName) {
     newX = x * 10
     for(var y = 0; y  < 45; y++) {
 
-      cell = new Cell("ALIVE", newX, y * 10);
+      cell = new Cell("DEAD", newX, y * 10);
       arrayName.push(cell);
     };
   };
 };
 
 function addColor(arrayName) {
-  arrayName.forEach((object) => {
-    const aliveCell = arrayName.some(cell => cell.status == "ALIVE");
-    if(aliveCell == true) {
-      console.log(object);
-      ctx.fillRect(object.getX, object.getY, 10, 10);
-    }
+  // arrayName.forEach((object) => {
+  //   const aliveCell = arrayName.find(cell => cell.status === "ALIVE");
+  //   if(aliveCell == true) {
+  //     console.log(aliveCell);
+  //     ctx.fillRect(object.getX, object.getY, 10, 10);
+  //   };
+  // });
+  const result = arrayName.filter(cell => cell.cellStatus == "ALIVE");
+  result.forEach((object) => {
+    ctx.fillRect(object.getX, object.getY, 10, 10);
   });
+  
 };
 
 
-// function addCell(cell, arrayName) {
-//     arrayName.push(cell);
+function addCell(cell, arrayName) {
+    arrayName.push(cell);
 
-// };
+};
 
 function viewArray(arrayName) {
   var length = arrayName.length;
@@ -73,7 +78,7 @@ drawGrid(ctx, 800, 450, 10);
 var arrayA = new Array();
 
 cellFactory(arrayA);
-// cellNew = new Cell("ALIVE", 10, 10);
-// addCell(cellNew, arrayA);
-// viewArray(arrayA);
+cellNew = new Cell("ALIVE", 10, 10);
+addCell(cellNew, arrayA);
+viewArray(arrayA);
 addColor(arrayA);
