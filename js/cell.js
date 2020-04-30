@@ -1,10 +1,9 @@
 
 class Cell {
-    constructor(cellStatus, x, y, neighbors) {
+    constructor(cellStatus, x, y) {
       this.status = cellStatus;
       this.x = x;
       this.y = y;
-      this.neighbors = neighbors;
     };
     get cellStatus() {
       return this.status;
@@ -23,11 +22,5 @@ class Cell {
     }
     get getY(){
       return this.y;
-    };
-    set setNeighbors(newNeighbor) {
-      this.neighbors = newNeighbor;
-    };
-    get getNeighbors(){
-      return this.neighbors;
     };
   };
