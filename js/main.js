@@ -28,26 +28,22 @@ function drawGrid(ctx, width, height, step) {
   ctx.stroke(); 
 };
 
-function cellFactory(arrayName) {
+function initialCellState() {
+  var array = new Array();
 
   for (var x = 0; x < 80; x++) {
     newX = x * 10
     for(var y = 0; y  < 45; y++) {
 
       cell = new Cell("DEAD", newX, y * 10);
-      arrayName.push(cell);
+      array.push(cell);
     };
   };
+  return array;
 };
 
 function addColor(arrayName) {
-  // arrayName.forEach((object) => {
-  //   const aliveCell = arrayName.find(cell => cell.status === "ALIVE");
-  //   if(aliveCell == true) {
-  //     console.log(aliveCell);
-  //     ctx.fillRect(object.getX, object.getY, 10, 10);
-  //   };
-  // });
+
   const result = arrayName.filter(cell => cell.cellStatus == "ALIVE");
   result.forEach((object) => {
     ctx.fillRect(object.getX, object.getY, 10, 10);
@@ -57,15 +53,26 @@ function addColor(arrayName) {
 
 
 function addCell(cell, arrayName) {
-    arrayName.push(cell);
+    x = cell.getX;
+    y = cell.getY;
 
+    for (var i in arrayName) {
+        if (x == arrayName[i].getX && y == arrayName[i].getY) {
+          arrayName[i].cellStatus= cell.cellStatus;
+          break;
+        }
+        else {
+          arrayName.push(cell);
+          break;
+        }        
+    };
 };
 
 function viewArray(arrayName) {
   var length = arrayName.length;
   for (var i = 0; i < length; i++) {
-      console.log(arrayName[i])
-  }
+      console.log(arrayName[i]);
+  };
   
 };
 
@@ -75,10 +82,9 @@ function viewArray(arrayName) {
  */
 drawGrid(ctx, 800, 450, 10);
 
-var arrayA = new Array();
 
-cellFactory(arrayA);
-cellNew = new Cell("ALIVE", 10, 10);
+arrayA = initialCellState();
+cellNew = new Cell("ALIVE", 0, 0);
 addCell(cellNew, arrayA);
 viewArray(arrayA);
 addColor(arrayA);
