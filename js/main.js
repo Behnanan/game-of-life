@@ -79,33 +79,6 @@ function addCell(cell, array){
   };
 };
 
-
-function changeCellStatus(cell, arrayName) {
-  x = cell.getX;
-  y = cell.getY;
-
-  for (var i in arrayName) {
-      if (x == arrayName[i].getX && y == arrayName[i].getY) {
-        arrayName[i].cellStatus = cell.cellStatus;
-        break;
-      };       
-  };
-};
-
-function viewArray(array1) {
-  var length = array1.length;
-  for (var i = 0; i < length; i++) {
-    console.log("array a:", array1[i]); 
-  };
-};
-
-function addColor(array1) {
-  const result = array1.filter(cell => cell.cellStatus == "ALIVE");
-  result.forEach((object) => {
-    ctx.fillRect(object.getX, object.getY, 10, 10);
-  });
-  
-};
 // check if an element exists in array using a comparer function
 // comparer : function(currentElement)
 Array.prototype.inArray = function(comparer) { 
@@ -123,6 +96,21 @@ Array.prototype.pushIfNotExist = function(element, comparer) {
   }
 }; 
 
+function viewArray(array1) {
+  var length = array1.length;
+  for (var i = 0; i < length; i++) {
+    console.log("array a:", array1[i]); 
+  };
+};
+
+function addColor(array1) {
+  const result = array1.filter(cell => cell.cellStatus == "ALIVE");
+  result.forEach((object) => {
+    ctx.fillRect(object.getX, object.getY, 10, 10);
+  });
+  
+};
+
 /**
  * END OF FUNCTIONS
  */
@@ -134,7 +122,6 @@ cell0 = new Cell("ALIVE", 10, 10);
 cell1 = new Cell("ALIVE", 20, 10);
 cell2 = new Cell("ALIVE", 760, 420);
 cell3 = new Cell("ALIVE", 0, 0);
-
 
 addCell(cell0, arrayA);
 addCell(cell1, arrayA);
