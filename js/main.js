@@ -28,10 +28,6 @@ function drawGrid(ctx, width, height, step) {
   ctx.lineWidth = 1;
   ctx.stroke(); 
 };
-cellCount = 0; // dead and alive cells
-inArrayCount = 0;
-notInArrayCount = 0;
-cellInArrayCount = 0;
 
 function addCell(cell, array){
   x = cell.getX;
@@ -57,41 +53,32 @@ function addCell(cell, array){
     
   }  
   else if (x >= 0 && x <= 790 && y >= 0 && y <= 440 && array.length > 0) { // array with at least 1 value, in boundaries
-    
-    for (var i = 0; i < 8; i++) { 
+    // cell not in array
+    array.pushIfNotExist(cell, function(e) { 
+      return e.x === cell .x && e.y === cell .y; 
+    });
+    // neighbors
+    for (var i = 0; i < 8; i++) {
+      
       var neighborX = x + arrayX[i];
       var neighborY = y + arrayY[i];
-      // console.log("--neighbor--: ", neighborX, neighborY)
+      if (neighborX >= 0 && neighborX <= 790 && neighborY >= 0 && neighborY <= 440) {
 
-      for(var eachCell in array) {
-        // console.log(" cell: ", array[eachCell].getX, array[eachCell].getY);
-        if(array[eachCell].getX == cell.getX && array[eachCell].getY == cell.getY){
-          array[eachCell].cellStatus = "ALIVE";
-        }
-
-        else if(neighborX == array[eachCell].getX && neighborY == array[eachCell].getY) {
-          continue;
-          // console.log("match: ", array[eachCell].getX, array[eachCell].getY);
-        }
-
-        else {
-          // console.log("no match: ", array[eachCell].getX, array[eachCell].getY);
-          var element = new Cell("DEAD", neighborX, neighborY); 
-          array.pushIfNotExist(element, function(e) { 
-            return e.x === element.x && e.y === element.y; 
-          });
-          
-
-        }
-
+        var neighbor = new Cell("DEAD", neighborX, neighborY); 
+        array.pushIfNotExist(neighbor , function(e) { 
+          return e.x === neighbor .x && e.y === neighbor .y; 
+        });
       };
-    }
-  }
-
-  else {
-    console.log("cell out of bounds.");
+    };
+    // cell in array
+    for(eachCell in array) {
+      if(array[eachCell].getX == x && array[eachCell].getY == y){
+        array[eachCell].cellStatus = "ALIVE";
+      };
+    };
   };
 };
+
 
 function changeCellStatus(cell, arrayName) {
   x = cell.getX;
@@ -108,7 +95,6 @@ function changeCellStatus(cell, arrayName) {
 function viewArray(array1) {
   var length = array1.length;
   for (var i = 0; i < length; i++) {
-    cellCount++;
     console.log("array a:", array1[i]); 
   };
 };
@@ -146,16 +132,16 @@ arrayA = new Array();
 // starter cells
 cell0 = new Cell("ALIVE", 10, 10);
 cell1 = new Cell("ALIVE", 20, 10);
-// cell2 = new Cell("ALIVE", 760, 420);
-// cell3 = new Cell("ALIVE", 0, 0);
+cell2 = new Cell("ALIVE", 760, 420);
+cell3 = new Cell("ALIVE", 0, 0);
 
 
 addCell(cell0, arrayA);
 addCell(cell1, arrayA);
-// addCell(cell2, arrayA);
-// addCell(cell3, arrayA);
+addCell(cell2, arrayA);
+addCell(cell3, arrayA);
 
 viewArray(arrayA);
 addColor(arrayA);
-console.log("count: ", cellCount);
+console.log("count: ", arrayA.length);
 
