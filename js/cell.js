@@ -23,8 +23,4 @@ class Cell {
     get getY(){
       return this.y;
     };
-    get coordinates() {
-      const [x, y] = this.coordinates;
-      return this.coordinates;
-    }
   };
