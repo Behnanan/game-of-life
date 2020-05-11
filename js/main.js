@@ -34,20 +34,22 @@ function addCell(cell, array){
   var arrayX = new Array(-10, 0, 10, -10, 10, -10, 0,  10);
   var arrayY = new Array(-10,-10,-10, 0,   0,  10, 10, 10);
 
-  if (x >= 0 && x <= 790 && y >= 0 && y <= 440 && array.length == 0) { // checks input cell boundaries && empty array
+  if (x >= 0 && x <= 790 && y >= 0 && y <= 440 && array.length == 0) { 
+    
     for(var i = 0; i < 8; i++) {
       var neighborX = x + arrayX[i];
       var neighborY = y + arrayY[i];
-      if (neighborX >= 0 && neighborX <= 790 && neighborY >= 0 && neighborY <= 440) { // checks boundaries
+      if (neighborX >= 0 && neighborX <= 790 && neighborY >= 0 && neighborY <= 440) { 
         neighborCell = new Cell("DEAD", neighborX, neighborY); 
-        array.push(neighborCell); // add dead neighbors 
+        array.push(neighborCell); 
         
       };
     };
-      array.push(cell); // add cell
+      array.push(cell); 
   }  
 
-  else if (x >= 0 && x <= 790 && y >= 0 && y <= 440 && array.length > 0) { // array with at least 1 value, in boundaries
+  else if (x >= 0 && x <= 790 && y >= 0 && y <= 440 && array.length > 0) { 
+
     array.pushIfNotExist(cell, function(e) { 
       return e.x === cell.x && e.y === cell.y; 
     });
@@ -77,9 +79,9 @@ function nextGeneration(array1, array2) {
   for(var i = 0; i < array1.length; i++) { 
 
     var cell = array1[i];
-    var status = cell.cellStatus;
-    var x = cell.getX;
-    var y = cell.getY;
+    // var status = cell.cellStatus;
+    var x = array1[i].getX;
+    var y = array1[i].getY;
     var arrayX = new Array(-10, 0, 10, -10, 10, -10, 0,  10);
     var arrayY = new Array(-10,-10,-10, 0,   0,  10, 10, 10);
     var neighborCount = 0;
@@ -98,42 +100,41 @@ function nextGeneration(array1, array2) {
       };
     };
 
-    if (status == "ALIVE") {
+    if (array1[i].cellStatus == "ALIVE") {
       if (neighborCount < 2) {
-        console.log(cell);
+        // console.log(" < 2", array1[i]);
         array1[i].cellStatus = "DEAD";
-        // console.log("neighbors < 2", cell);
         array1.splice(i, 1);
-        array2.push(cell);
+        array2.push(array1[i]);
         i--; 
       };
 
       if(neighborCount == 2 || neighborCount == 3) {
-        // console.log("neighbors == 2", cell);
+        console.log("should be alive", array1[i])
+        // console.log(" == 2, 3", array1[i]);
         array1.splice(i, 1);
-        array2.push(cell);
+        array2.push(array1[i]);
         i--; 
       };
     
       if (neighborCount > 3) { 
         array1[i].cellStatus = "DEAD";
-        // console.log("neighbors > 3", cell);
+        // console.log(" > 3", array1[i]);
         array1.splice(i, 1);
-        array2.push(cell);
+        array2.push(array1[i]);
         i--; 
       };
     }
-    else if (status == "DEAD") {
+    else if (array1[i].cellStatus == "DEAD") {
       if(neighborCount == 3) {
         array1[i].cellStatus = "ALIVE";
-        // console.log("neighbors == 3", cell);
         array1.splice(i, 1);
-        array2.push(cell);
+        array2.push(array1[i]);
         i--; 
       }
       else {
         array1.splice(i, 1);
-        array2.push(cell);
+        array2.push(array1[i]);
         i--; 
       };
     };  
@@ -161,46 +162,34 @@ function viewArray(array) {
 };
 
 function addColor(array) {
-  const alive = array.filter(cell => cell.cellStatus == "ALIVE");
-  alive.forEach((object) => {
-    ctx.fillRect(object.getX, object.getY, 10, 10);
+  const alive = array.filter(cella => cella.cellStatus == "ALIVE");
+  alive.forEach((objecta) => {
+    ctx.fillRect(objecta.getX, objecta.getY, 10, 10);
   });
-  const dead = array.filter(cell => cell.cellStatus == "DEAD");
-  dead.forEach((object) => {
-    ctx.clearRect(object.getX, object.getY, 10, 10);
+  const dead = array.filter(celld => celld.cellStatus == "DEAD");
+  dead.forEach((objectd) => {
+    ctx.clearRect(objectd.getX, objectd.getY, 10, 10);
   });
 };
 
 /**
  * END OF FUNCTIONS
  */
-drawGrid(ctx, 800, 450, 10);
+// drawGrid(ctx, 800, 450, 10);
 
 arrayA = new Array();
 arrayB = new Array();
 
 // starter cells
-cell0 = new Cell("ALIVE", 10, 10);
-cell1 = new Cell("ALIVE", 20, 10);
-cell3 = new Cell("ALIVE", 30, 10);
+cell0 = new Cell("ALIVE", 10, 0);
+cell1 = new Cell("ALIVE", 0, 10);
+cell3 = new Cell("ALIVE", 10, 10);
+
 
 addCell(cell0, arrayA);
 addCell(cell1, arrayA);
 addCell(cell3, arrayA);
 
-console.log("-- gen 1 --");
-addColor(arrayA);
-addColor(arrayB);
-
-// nextGeneration(arrayA, arrayB);
-// console.log("-- gen 2 --");
-// addColor(arrayA);
-// addColor(arrayB);
-
-// nextGeneration(arrayB, arrayA);
-// console.log("-- gen 3 --");
-// addColor(arrayA);
-// addColor(arrayB);
 
 console.log("arrayA count: ", arrayA.length);
 viewArray(arrayA);

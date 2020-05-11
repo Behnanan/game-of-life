@@ -1,4 +1,3 @@
-
 class Cell {
     constructor(cellStatus, x, y) {
       this.status = cellStatus;
