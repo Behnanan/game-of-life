@@ -79,9 +79,8 @@ function nextGeneration(array1, array2) {
   for(var i = 0; i < array1.length; i++) { 
 
     var cell = array1[i];
-    // var status = cell.cellStatus;
-    var x = array1[i].getX;
-    var y = array1[i].getY;
+    var x = cell.getX;
+    var y = cell.getY;
     var arrayX = new Array(-10, 0, 10, -10, 10, -10, 0,  10);
     var arrayY = new Array(-10,-10,-10, 0,   0,  10, 10, 10);
     var neighborCount = 0;
@@ -98,43 +97,48 @@ function nextGeneration(array1, array2) {
           };
         });
       };
+      // if (neighborX >= 0 && neighborX <= 790 && neighborY >= 0 && neighborY <= 440 ) {
+      //   for(var i = 0; i < array1.length; i++) {
+      //     if(cell.cellStatus == "ALIVE") {
+      //       if(cell.getX == neighborX && cell.getY == neighborY) {
+      //         neighborCount++;
+      //       };
+      //     };
+      //   };      
+      // };
     };
-
-    if (array1[i].cellStatus == "ALIVE") {
+    if (cell.cellStatus == "ALIVE") {
       if (neighborCount < 2) {
-        // console.log(" < 2", array1[i]);
-        array1[i].cellStatus = "DEAD";
+        cell.cellStatus = "DEAD";
         array1.splice(i, 1);
-        array2.push(array1[i]);
+        array2.push(cell);
         i--; 
       };
 
       if(neighborCount == 2 || neighborCount == 3) {
-        console.log("should be alive", array1[i])
-        // console.log(" == 2, 3", array1[i]);
+        // console.log("should be alive", cell)
         array1.splice(i, 1);
-        array2.push(array1[i]);
+        array2.push(cell);
         i--; 
       };
     
       if (neighborCount > 3) { 
-        array1[i].cellStatus = "DEAD";
-        // console.log(" > 3", array1[i]);
+        cell.cellStatus = "DEAD";
         array1.splice(i, 1);
-        array2.push(array1[i]);
+        array2.push(cell);
         i--; 
       };
     }
-    else if (array1[i].cellStatus == "DEAD") {
+    else if (cell.cellStatus == "DEAD") {
       if(neighborCount == 3) {
-        array1[i].cellStatus = "ALIVE";
+        cell.cellStatus = "ALIVE";
         array1.splice(i, 1);
-        array2.push(array1[i]);
+        array2.push(cell);
         i--; 
       }
       else {
         array1.splice(i, 1);
-        array2.push(array1[i]);
+        array2.push(cell);
         i--; 
       };
     };  
@@ -157,19 +161,32 @@ Array.prototype.pushIfNotExist = function(element, comparer) {
 function viewArray(array) {
   var length = array.length;
   for (var i = 0; i < length; i++) {
-    console.log("view array: ", array[i]); 
+    if(array[i] !== undefined) {   
+      console.log("view array: ", array[i]); 
+    };
   };
 };
 
 function addColor(array) {
-  const alive = array.filter(cella => cella.cellStatus == "ALIVE");
-  alive.forEach((objecta) => {
-    ctx.fillRect(objecta.getX, objecta.getY, 10, 10);
-  });
-  const dead = array.filter(celld => celld.cellStatus == "DEAD");
-  dead.forEach((objectd) => {
-    ctx.clearRect(objectd.getX, objectd.getY, 10, 10);
-  });
+
+  for(var i = 0; i < array.length; i++) {
+    if(array[i] !== undefined) {   
+      if(array[i].cellStatus == "ALIVE") {
+        ctx.fillRect(array[i].getX, array[i].getY, 10, 10);
+      };
+      if(array[i].cellStatus == "DEAD") {
+        ctx.clearRect(array[i].getX, array[i].getY, 10, 10);
+      };
+    };
+  };
+  // const alive = array.filter(cell => cell.cellStatus == "ALIVE");
+  // alive.forEach((object) => {
+  //   ctx.fillRect(object.getX, object.getY, 10, 10);
+  // });
+  // const dead = array.filter(cell => cell.cellStatus == "DEAD");
+  // dead.forEach((object) => {
+  //   ctx.clearRect(object.getX, object.getY, 10, 10);
+  // });
 };
 
 /**
@@ -190,6 +207,15 @@ addCell(cell0, arrayA);
 addCell(cell1, arrayA);
 addCell(cell3, arrayA);
 
+addColor(arrayA);
+
+nextGeneration(arrayA, arrayB);
+
+addColor(arrayB);
+
+// nextGeneration(arrayB, arrayA);
+
+// addColor(arrayA);
 
 console.log("arrayA count: ", arrayA.length);
 viewArray(arrayA);
