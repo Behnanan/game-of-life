@@ -81,67 +81,67 @@ function nextGeneration(array1, array2) {
     var cell = array1[i];
     var x = cell.getX;
     var y = cell.getY;
-    var arrayX = new Array(-10, 0, 10, -10, 10, -10, 0,  10);
-    var arrayY = new Array(-10,-10,-10, 0,   0,  10, 10, 10);
+    var arrayX = new Array(-10, 0, 10, -10, 10, -10, 0, 10);
+    var arrayY = new Array(-10, -10, -10, 0, 0,  10, 10, 10);
     var neighborCount = 0;
 
-    for(var j = 0; j < 8; j++) {
+    for(var j = 0; j < 8; j++) { 
       var neighborX = x + arrayX[j];
       var neighborY = y + arrayY[j];
 
       if (neighborX >= 0 && neighborX <= 790 && neighborY >= 0 && neighborY <= 440 ) {
-        const alive = array1.filter(cell => cell.cellStatus == "ALIVE");
-        alive.forEach((object) => {
-          if(object.getX == neighborX && object.getY == neighborY) {
+        let alive = array1.filter(cell => cell.cellStatus == "ALIVE"); 
+        
+        for(var k = 0; k < alive.length; k++) { 
+          if(neighborX == alive[k].getX && neighborY == alive[k].getY) {
+            // console.log(cell);
             neighborCount++;
           };
-        });
+        };
+        
       };
-      // if (neighborX >= 0 && neighborX <= 790 && neighborY >= 0 && neighborY <= 440 ) {
-      //   for(var i = 0; i < array1.length; i++) {
-      //     if(cell.cellStatus == "ALIVE") {
-      //       if(cell.getX == neighborX && cell.getY == neighborY) {
-      //         neighborCount++;
-      //       };
-      //     };
-      //   };      
-      // };
     };
-    if (cell.cellStatus == "ALIVE") {
-      if (neighborCount < 2) {
-        cell.cellStatus = "DEAD";
-        array1.splice(i, 1);
-        array2.push(cell);
-        i--; 
-      };
+    console.log(cell, neighborCount);
+    // if (cell.cellStatus == "ALIVE") {
+    //   if (neighborCount < 2) {
+    //     cell.cellStatus = "DEAD";
+    //     array1.splice(i, 1);
+    //     array2.push(cell);
+    //     i--; 
+    //   };
 
-      if(neighborCount == 2 || neighborCount == 3) {
-        // console.log("should be alive", cell)
-        array1.splice(i, 1);
-        array2.push(cell);
-        i--; 
-      };
+    //   if(neighborCount == 2 || neighborCount == 3) {
+    //     // console.log("shouldn't be alive", cell)
+    //     array1.splice(i, 1);
+    //     array2.push(cell);
+    //     i--; 
+    //   };
     
-      if (neighborCount > 3) { 
-        cell.cellStatus = "DEAD";
-        array1.splice(i, 1);
-        array2.push(cell);
-        i--; 
-      };
-    }
-    else if (cell.cellStatus == "DEAD") {
-      if(neighborCount == 3) {
-        cell.cellStatus = "ALIVE";
-        array1.splice(i, 1);
-        array2.push(cell);
-        i--; 
-      }
-      else {
-        array1.splice(i, 1);
-        array2.push(cell);
-        i--; 
-      };
-    };  
+    //   if (neighborCount > 3) { 
+    //     cell.cellStatus = "DEAD";
+    //     array1.splice(i, 1);
+    //     array2.push(cell);
+    //     i--; 
+    //   };
+    // }
+    // else if (cell.cellStatus == "DEAD") {
+    //   if(neighborCount == 3) {
+    //     // var newCell = new Cell("ALIVE", x, y); 
+    //     // console.log(newCell)
+    //     cell.cellStatus = "ALIVE";
+    //     array1.splice(i, 1);
+    //     array2.push(cell);
+    //     i--; 
+    //   }
+    //   else {
+    //     array1.splice(i, 1);
+    //     array2.push(cell);
+    //     i--; 
+      // };
+    // }; 
+    array1.splice(i, 1);
+    array2.push(cell);
+    i--;  
   };
 };
 
@@ -172,10 +172,14 @@ function addColor(array) {
   for(var i = 0; i < array.length; i++) {
     if(array[i] !== undefined) {   
       if(array[i].cellStatus == "ALIVE") {
+        ctx.fillStyle = "black"
         ctx.fillRect(array[i].getX, array[i].getY, 10, 10);
       };
       if(array[i].cellStatus == "DEAD") {
-        ctx.clearRect(array[i].getX, array[i].getY, 10, 10);
+        // ctx.clearRect(array[i].getX, array[i].getY, 10, 10);
+        ctx.fillStyle = "grey";
+        ctx.fillRect(array[i].getX, array[i].getY, 10, 10);
+
       };
     };
   };
@@ -198,14 +202,11 @@ arrayA = new Array();
 arrayB = new Array();
 
 // starter cells
-cell0 = new Cell("ALIVE", 10, 0);
-cell1 = new Cell("ALIVE", 0, 10);
-cell3 = new Cell("ALIVE", 10, 10);
-
+cell0 = new Cell("ALIVE", 10, 10);
+cell1 = new Cell("ALIVE", 10, 20);
 
 addCell(cell0, arrayA);
 addCell(cell1, arrayA);
-addCell(cell3, arrayA);
 
 addColor(arrayA);
 
