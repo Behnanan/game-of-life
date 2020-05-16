@@ -197,16 +197,12 @@ addCell(cell0, arrayA);
 addCell(cell1, arrayA);
 addCell(cell2, arrayA);
 
-
-
 updateNeighbors(arrayA);
 addColor(arrayA);
 nextGeneration(arrayA, arrayB);
 addColor(arrayB);
-
 updateNeighbors(arrayB);
 nextGeneration(arrayB, arrayA);
-
 addColor(arrayA);
 
 console.log("arrayA count: ", arrayA.length);
