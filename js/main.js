@@ -1,32 +1,5 @@
-
-// canvas and grid
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
-
-// draw grid
-function drawGrid(ctx, width, height, step) {
-  // y axis
-  ctx.beginPath(); 
-  for (var x = 0; x <= width; x += step) {
-  ctx.moveTo(x, 0);
-  ctx.lineTo(x, height);
-  };
-  // set the color of the line
-  ctx.strokeStyle = 'rgb(20,20,20)';
-  ctx.lineWidth = 1;
-  ctx.stroke(); 
-
-  // x axis
-  ctx.beginPath(); 
-  for (var y = 0; y <= height; y += step) {
-  ctx.moveTo(0, y);
-  ctx.lineTo(width, y);
-  };
-  // set the color of the line
-  ctx.strokeStyle = 'rgb(20,20,20)';
-  ctx.lineWidth = 1;
-  ctx.stroke(); 
-};
 
 function addCell(cell, array){
   x = cell.getX;
@@ -88,11 +61,8 @@ function updateNeighbors(array) {
 
       if (neighborX >= 0 && neighborX <= 790 && neighborY >= 0 && neighborY <= 440 ) {
         let alive = array.filter(cell => cell.getCellStatus == "ALIVE"); 
-        
-        for(var k = 0; k < alive.length; k++) { 
-          if(neighborX == alive[k].getX && neighborY == alive[k].getY) {
-            // neighborCount++;
-            // cell.neighbors = cell.neighbors + 1;
+        for(var l = 0; l < alive.length; l++) { 
+          if(neighborX == alive[l].getX && neighborY == alive[l].getY) {
             cell.setNeighbors = cell.getNeighbors + 1;
           };
         };
@@ -127,9 +97,11 @@ function nextGeneration(array1, array2) {
     }
     else if (cell.getCellStatus == "DEAD") {
       if(neighborCount == 3) {
-        cell.setCellStatus = "ALIVE";
+        // cell.setCellStatus = "ALIVE";
         array1.splice(i, 1);
-        array2.push(cell);
+        newCell = new Cell("ALIVE", cell.getX, cell.getY, 0);
+        addCell(newCell, array2);
+        // array2.push(cell);
         i--; 
       }
       else {
@@ -167,48 +139,86 @@ function addColor(array) {
   for(var i = 0; i < array.length; i++) {
     if(array[i] !== undefined) {   
       if(array[i].getCellStatus == "ALIVE") {
-        ctx.fillStyle = "black"
+        var style = "#"+((1<<24)*Math.random()|0).toString(16)
+        ctx.fillStyle = style;
+        ctx.globalAlpha = 0.4;
         ctx.fillRect(array[i].getX, array[i].getY, 10, 10);
       };
       if(array[i].getCellStatus == "DEAD") {
-        // ctx.clearRect(array[i].getX, array[i].getY, 10, 10);
-        ctx.fillStyle = "grey";
-        ctx.fillRect(array[i].getX, array[i].getY, 10, 10);
+        ctx.clearRect(array[i].getX, array[i].getY, 10, 10);
       };
     };
   };
 };
 
-/**
- * END OF FUNCTIONS
- */
-// drawGrid(ctx, 800, 450, 10);
+
 
 arrayA = new Array();
 arrayB = new Array();
 
-// starter cells
+//glider
 cell0 = new Cell("ALIVE", 0, 0, 0);
-cell1 = new Cell("ALIVE", 0, 10, 0);
-cell2 = new Cell("ALIVE", 10, 0, 0);
-
+cell1 = new Cell("ALIVE", 0, 20, 0);
+cell2 = new Cell("ALIVE", 10, 20, 0);
+cell3 = new Cell("ALIVE", 10, 10, 0);
+cell4 = new Cell("ALIVE", 20, 10, 0);
 
 addCell(cell0, arrayA);
 addCell(cell1, arrayA);
 addCell(cell2, arrayA);
+addCell(cell3, arrayA);
+addCell(cell4, arrayA);
 
-updateNeighbors(arrayA);
-addColor(arrayA);
-nextGeneration(arrayA, arrayB);
-addColor(arrayB);
-updateNeighbors(arrayB);
-nextGeneration(arrayB, arrayA);
-addColor(arrayA);
+// // blinker
+// cell5 = new Cell("ALIVE", 10, 0, 0);
+// cell6 = new Cell("ALIVE", 10, 10, 0);
+// cell7 = new Cell("ALIVE", 10, 20, 0);
+// addCell(cell5, arrayA);
+// addCell(cell6, arrayA);
+// addCell(cell7, arrayA);
 
-console.log("arrayA count: ", arrayA.length);
-viewArray(arrayA);
-console.log("arrayB count: ", arrayB.length);
-viewArray(arrayB);
+
+function flipFlop(array1, array2, i){
+  if(i % 2 == 0){
+    addColor(array1);
+    updateNeighbors(array1);
+    nextGeneration(array1, array2);
+  }
+  else{
+    addColor(array2);
+    updateNeighbors(array2);
+    nextGeneration(array2, array1);
+  }
+}
+
+var repeater;
+var count = 0;
+function doWork(){
+  repeater = setTimeout(doWork, 2000);
+  console.log("doing work...", count);
+  flipFlop(arrayA, arrayB, count);
+  count++;
+  if(count == 21){
+    stopWork();
+  };
+}
+
+function stopWork(){
+  clearTimeout(repeater);
+}
+
+doWork();
+
+// console.log("arrayA count: ", arrayA.length);
+// viewArray(arrayA);
+// console.log("arrayB count: ", arrayB.length);
+// viewArray(arrayB);
+
+
+
+
+
+
 
 
 
