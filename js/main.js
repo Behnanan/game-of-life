@@ -97,11 +97,9 @@ function nextGeneration(array1, array2) {
     }
     else if (cell.getCellStatus == "DEAD") {
       if(neighborCount == 3) {
-        // cell.setCellStatus = "ALIVE";
         array1.splice(i, 1);
         newCell = new Cell("ALIVE", cell.getX, cell.getY, 0);
         addCell(newCell, array2);
-        // array2.push(cell);
         i--; 
       }
       else {
@@ -139,13 +137,16 @@ function addColor(array) {
   for(var i = 0; i < array.length; i++) {
     if(array[i] !== undefined) {   
       if(array[i].getCellStatus == "ALIVE") {
-        var style = "#"+((1<<24)*Math.random()|0).toString(16)
-        ctx.fillStyle = style;
-        ctx.globalAlpha = 0.4;
+        // var style = "#"+((1<<24)*Math.random()|0).toString(16)
+        // ctx.fillStyle = style;
+        // ctx.globalAlpha = 0.4;
+        ctx.fillStyle = "black";
         ctx.fillRect(array[i].getX, array[i].getY, 10, 10);
       };
       if(array[i].getCellStatus == "DEAD") {
-        ctx.clearRect(array[i].getX, array[i].getY, 10, 10);
+        // ctx.clearRect(array[i].getX, array[i].getY, 10, 10);
+        ctx.fillStyle = "grey";
+        ctx.fillRect(array[i].getX, array[i].getY, 10, 10);
       };
     };
   };
@@ -157,11 +158,11 @@ arrayA = new Array();
 arrayB = new Array();
 
 //glider
-cell0 = new Cell("ALIVE", 0, 0, 0);
-cell1 = new Cell("ALIVE", 0, 20, 0);
-cell2 = new Cell("ALIVE", 10, 20, 0);
-cell3 = new Cell("ALIVE", 10, 10, 0);
-cell4 = new Cell("ALIVE", 20, 10, 0);
+cell0 = new Cell("ALIVE", 10, 0, 0);
+cell1 = new Cell("ALIVE", 20, 10, 0);
+cell2 = new Cell("ALIVE", 0, 20, 0);
+cell3 = new Cell("ALIVE", 10, 20, 0);
+cell4 = new Cell("ALIVE", 20, 20, 0);
 
 addCell(cell0, arrayA);
 addCell(cell1, arrayA);
