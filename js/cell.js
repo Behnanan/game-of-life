@@ -29,4 +29,4 @@ class Cell {
     get getNeighbors() {
       return this.neighbors;
     }
-  };
+};
