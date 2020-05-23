@@ -19,14 +19,14 @@ class Cell {
     };
     set setY(newY){
       this.y = newY;
-    }
+    };
     get getY(){
       return this.y;
     };
     set setNeighbors(newNeighbors) {
       this.neighbors = newNeighbors;
-    }
+    };
     get getNeighbors() {
       return this.neighbors;
-    }
+    };
 };

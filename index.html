@@ -3,12 +3,30 @@
 
 <!DOCTYPE html>
 <html>
+<head>
+    <canvas id="canvas" width="800" height="450"></canvas>
+    <script type="text/javascript" src="js/cell.js"></script>
+    
+
+</head>
 <body>
-
-<canvas id="canvas" width="800" height="450"></canvas>
-
-<script type="text/javascript" src="js/cell.js"></script>
-<script type="text/javascript" src="js/main.js"></script>
+    
+    <br>
+    <button type="button" id='gosper'>Gosper gun</button> 
+    <script type="text/javascript">
+        var gosperGun = document.getElementById('gosper');
+        gosperGun.onclick = function(){
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src = "js/game-of-life-gg-v1.js"
+            document.getElementsByTagName("head")[0].appendChild(script);
+            return false;
+        };
+    </script>
 
 </body>
+<footer>
+
+
+</footer>
 </html>
