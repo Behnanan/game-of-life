@@ -1,5 +1,9 @@
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
+var canvas = document.getElementById("canvas"),
+context = canvas.getContext("2d"),
+elemLeft = canvas.offsetLeft + canvas.clientLeft,
+elemTop = canvas.offsetTop + canvas.clientTop,
+repeater,
+count = 0;
 
 function addCell(cell, array){
   x = cell.getX;
@@ -45,8 +49,7 @@ function addCell(cell, array){
           array[k].setCellStatus = "DEAD";
         };
       };
-    }
-
+    };
   };
 };
 
@@ -148,42 +151,15 @@ Array.prototype.pushIfNotExist = function(element, comparer) {
   };
 };
 
-function viewArray(array) {
-  var length = array.length;
-  for (var i = 0; i < length; i++) {
-    if(array[i] !== undefined) {   
-      console.log("view array: ", array[i]); 
-    };
-  };
-};
-
 function blackAndWhite(array) {
   for(var i = 0; i < array.length; i++) {
     if(array[i] !== undefined) {   
       if(array[i].getCellStatus == "ALIVE") {
-        ctx.fillStyle = "black";
-        ctx.fillRect(array[i].getX, array[i].getY, 10, 10);
+        context.fillStyle = "black";
+        context.fillRect(array[i].getX, array[i].getY, 10, 10);
       };
       if(array[i].getCellStatus == "DEAD") {
-        ctx.fillStyle = "grey";
-        ctx.fillRect(array[i].getX, array[i].getY, 10, 10);
-      };
-    };
-  };
-};
-
-function technicolor(array) {
-  for(var i = 0; i < array.length; i++) {
-    if(array[i] !== undefined) {   
-      if(array[i].getCellStatus == "ALIVE") {
-        var style = "#"+((1<<24)*Math.random()|0).toString(16)
-        ctx.fillStyle = style;
-        ctx.globalAlpha = 0.4;
-        ctx.fillRect(array[i].getX, array[i].getY, 10, 10);
-      };
-      if(array[i].getCellStatus == "DEAD") {
-        ctx.clearRect(array[i].getX, array[i].getY, 10, 10);
-        ctx.fillRect(array[i].getX, array[i].getY, 10, 10);
+        context.clearRect(array[i].getX, array[i].getY, 10, 10);
       };
     };
   };
@@ -192,23 +168,35 @@ function technicolor(array) {
 arrayA = new Array();
 arrayB = new Array();
 
-function gosper(){
-  gosperArrayX = new Array(20, 30, 20, 30, 360, 370, 360, 370, 260, 260, 240, 230, 220, 230, 220, 230, 220, 240, 260, 260,
-    150, 140, 130, 120, 120, 120, 130, 140, 150, 170, 180, 180, 190, 160, 180, 170);
-  gosperArrayY = new Array(40, 40, 50, 50, 20, 20, 30, 30, 0, 10, 10, 20, 20, 30, 30, 40, 40, 50, 50, 60, 20, 20, 30, 40, 
-    50, 60, 70, 80, 80, 70, 60, 50, 50, 50, 40, 30);
+function gosperGun(){
 
-  for(var i = 0; i < gosperArrayX.length; i++){
-    x = gosperArrayX[i];
-    y = gosperArrayY[i];
-    cell = new Cell("ALIVE", x, y, 0);
-    addCell(cell, arrayA);
+  if(arrayB.length > 0){
+    newGosperGun = new GosperGun(arrayB);
+    arrayB = newGosperGun.makeGun();
+    blackAndWhite(arrayB);
+  }
+  else {
+    newGosperGun = new GosperGun(arrayA);
+    arrayA = newGosperGun.makeGun();
+    blackAndWhite(arrayA);
   };
 };
 
+function pulsar(){
+  if(arrayA.length > 0){
+    newPulsar = new Pulsar(arrayA);
+    arrayA = newPulsar.makePulsar();
+    blackAndWhite(arrayA);
+  }
+  else {
+    newPulsar = new Pulsar(arrayB);
+    arrayB = newPulsar.makePulsar();
+    blackAndWhite(arrayB);
+  };
+};
 
-function flipFlop(array1, array2, i){
-  if(i % 2 == 0){
+function flipFlop(array1, array2, i) {
+  if(i % 2 == 0) {
     blackAndWhite(array1);
     updateNeighborCount(array1);
     nextGeneration(array1, array2);
@@ -220,18 +208,44 @@ function flipFlop(array1, array2, i){
   };
 };
 
-var repeater;
-var count = 0;
-
 function doWork() {
-  repeater = setTimeout(doWork, 50);
+  repeater = setTimeout(doWork, 75);
   flipFlop(arrayA, arrayB, count);
   count++;
 };
 
-gosper();
-doWork(); 
+function stopWork(){
+  clearTimeout(repeater);
+};
 
+function clearWork(){
+  clearTimeout(repeater);  
+  arrayA.splice(0, arrayA.length);
+  arrayB.splice(0, arrayB.length);
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  count = 0;
+};
 
+function next(){
+  repeater = setTimeout(doWork, 75);
+  flipFlop(arrayA, arrayB, count);
+  count++;
+  clearTimeout(repeater);
+};
 
+canvas.addEventListener('click', function(event) {
+  var x = event.pageX - elemLeft,
+      y = event.pageY - elemTop;
 
+  x = Math.floor((x / 10)) * 10;
+  y = Math.floor((y / 10)) * 10;
+  cell = new Cell("ALIVE", x, y, 0);
+  if(arrayA.length > 0) {
+    addCell(cell, arrayA);
+    blackAndWhite(arrayA);
+  }
+  else{
+    addCell(cell, arrayB);
+    blackAndWhite(arrayB);
+  };
+}, false);
